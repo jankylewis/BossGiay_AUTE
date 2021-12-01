@@ -9,6 +9,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeTest;
@@ -25,9 +26,10 @@ public abstract class TestAbstractClass {
     @Var
     public final        String              baseURL= confReader.getWebApplicationBaseURL();
     public       static JavascriptExecutor  javascript;
-    public       static Actions             action;
+    public       static Actions             actions;
     public       static WebDriver           driver;
     public final static Logger              log= org.apache.logging.log4j.LogManager.getLogger();
+    public       static WebDriverWait       waitFor;
 
     public String browserArray[]= {"firefox", "chrome", "opera", "IE", "Edge"};
 
