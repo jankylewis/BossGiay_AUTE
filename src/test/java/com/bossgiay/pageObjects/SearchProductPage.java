@@ -46,6 +46,14 @@ public class SearchProductPage extends BasePage {
     @CacheLookup
     public WebElement BTN_SEARCH;
 
+    @FindBy(xpath = "//div[@id=\"pagination\"]//*[local-name() = 'svg' and @version and @viewBox]")
+    @CacheLookup
+    public WebElement BTN_NEXT;
+
+    public void clickOnNextButton() {
+        clickOnElementWE(BTN_NEXT, driver);
+    }
+
     public void clickOnSearchButton() {
         clickOnElementWE(SVG_SEARCH_BUTTON, driver);
     }
@@ -68,6 +76,10 @@ public class SearchProductPage extends BasePage {
 
     public void pauseWithTryCatch(float seconds) {
         pauseWithTryCatch(seconds);
+    }
+
+    public void executeScrollingDown(double scrollCoordinates) {
+        executeScrollingDown(scrollCoordinates, javascript, driver);
     }
 
 }

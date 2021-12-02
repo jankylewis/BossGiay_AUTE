@@ -6,9 +6,11 @@ import com.bossgiay.testListeners.TestListeners;
 import com.bossgiay.testUtilities.ConfigurationReader;
 import com.google.errorprone.annotations.Var;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -26,8 +28,10 @@ import java.util.Random;
 public class TSs_SearchSneakers extends TestAbstractClass {
 
     ConfigurationReader confReader = new ConfigurationReader();
+    @SuppressWarnings("unsuable")
     SearchProductPage search;
     WebDriver dr;
+    Actions actions;
 
     @Var
     private boolean checkPointIfFailed;
@@ -54,6 +58,10 @@ public class TSs_SearchSneakers extends TestAbstractClass {
             By.xpath("//div[@id=\"search\"]//h2");
     private final By LBL_NO_RESULTS_FOUND_TEXT_LOCATOR=
             By.xpath("//div[@id=\"search\"]//preceding::div[1][@class=\"subtext\"]");
+    private final By BTN_PAGE_NODE_LOCATOR=
+            By.xpath("//div[@id=\"pagination\"]//a[@class=\"page-node\"]");
+    private final By BTN_NEXT_LOCATOR=
+            By.xpath("//div[@id=\"pagination\"]//a[@class=\"next\"]//following-sibling::*[local-name() = 'svg' and @version and @viewBox]");
 
     private List<String> sneakersArray = new ArrayList<String>();
     private String searchSneakerKeyArr[];
@@ -265,9 +273,50 @@ public class TSs_SearchSneakers extends TestAbstractClass {
         }
     }
 
+    @Test(groups = {"002"},
+            enabled = true,
+            priority = -3,
+            description = "returned list of sneakers is more than one page")
+    public void searchSneakerTest02() throws TimeoutException, AWTException {
+        this.searchSneakerKeyArr = new String[] {"A", "B", "S", "N", "M"};
+        this.searchKey = searchSneakerKeyArr[new Random().nextInt(searchSneakerKeyArr.length)];
+//        project to SearchProductPage to use method
+        SearchProductPage searchPage = new SearchProductPage(driver);
+        searchPage.clickOnSearchButton();
+        log.info("//------CLICKED SPY GLASS BUTTON-------//" + "\n");
+        searchPage.sendKeysToSearchTxt(searchKey);
+        log.info("//------INPUTTED SEARCH KEY-------//" + "\n");
+        searchPage.pauseWithTryCatch(750);
+        searchPage.clickOnPoppedUpSearchButton();
+        log.info("//------SEARCHED-------//" + "\n");
+
+        int clickIndex=0;
+        int pageNodeSize= driver.findElements(BTN_PAGE_NODE_LOCATOR).size();
+//        System.out.println(pageNodeSize);
+        for (int index = 0; index< pageNodeSize; index++) {
+
+            int listOfSneakersSize= driver.findElements(LBL_SNEAKER_NAME_CHILD_LOCATOR).size();
+            System.out.println("Number of sneakers page "+ (index+ 1)+
+                    " is: "+ listOfSneakersSize+ " sneakers"+ "\n");
 
 
 
+
+
+            WebElement nextButton= driver.findElement(BTN_NEXT_LOCATOR);
+            searchPage.executeScrollingDown(5000);
+            searchPage.pauseWithTryCatch(550);
+            nextButton.click();
+            clickIndex+=1;
+            if (clickIndex-1==index && clickIndex==pageNodeSize) {
+                System.out.println("\" //-----**------ THE LAST PAGE --------**-------//\""+ "\n");
+                int listOfSneakersLastPageSize= driver.findElements(LBL_SNEAKER_NAME_CHILD_LOCATOR).size();
+                System.out.println("Number of sneakers page "+ (pageNodeSize+ 1)+
+                        " is: "+ listOfSneakersLastPageSize+ " sneakers"+ "\n");
+            }
+        }
+
+    }
 
 
 

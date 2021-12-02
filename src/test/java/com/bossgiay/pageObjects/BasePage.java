@@ -2,6 +2,7 @@ package com.bossgiay.pageObjects;
 
 import com.bossgiay.testScripts.TestAbstractClass;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -78,6 +79,10 @@ public class BasePage extends TestAbstractClass {
         } catch (InterruptedException exception) {
             exception.printStackTrace();
         }
+    }
+
+    public static void executeScrollingDown(double scrollCoordinates, JavascriptExecutor js, WebDriver dr) {
+        ((JavascriptExecutor)dr).executeScript("scroll(0,"+scrollCoordinates+")");
     }
 
 }
