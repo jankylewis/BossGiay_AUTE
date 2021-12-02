@@ -42,8 +42,16 @@ public class SearchProductPage extends BasePage {
     @CacheLookup
     public WebElement TXT_SEARCH;
 
+    @FindBy(xpath = "//button[@id=\"search-header-btn\"]")
+    @CacheLookup
+    public WebElement BTN_SEARCH;
+
     public void clickOnSearchButton() {
         clickOnElementWE(SVG_SEARCH_BUTTON, driver);
+    }
+
+    public void clickOnPoppedUpSearchButton() {
+        clickOnElementWE(BTN_SEARCH, driver);
     }
 
     public void sendKeysToSearchTxt(String key) {
