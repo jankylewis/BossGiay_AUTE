@@ -6,7 +6,9 @@ Suite">
 
         <groups>
             <run>
+                <include name="001"></include>
                 <include name="002"></include>
+                <include name="003"></include>
             </run>
         </groups>
 

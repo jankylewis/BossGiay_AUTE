@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
-
+//import listeners class
 @Listeners({TestListeners.class})
 public class TSs_SearchSneakers extends TestAbstractClass {
 
@@ -33,6 +33,7 @@ public class TSs_SearchSneakers extends TestAbstractClass {
     WebDriver dr;
     Actions actions;
 
+//    declare variables
     @Var
     private boolean checkPointIfFailed;
     private boolean checkPointIfPassed;
@@ -77,16 +78,27 @@ public class TSs_SearchSneakers extends TestAbstractClass {
             enabled = true,
             description = "facilitate repelling driver")
     public void afSearchCaseMethod() throws TimeoutException {
-//        testTearDown();
+        testTearDown();
     }
 
     @Test(groups = {"001"},
             enabled = true,
             priority = -4,
-            description = "returned result is less than two page")
+            description =
+
+                    "This test case is to test the list of returned sneakers that are worked functionally." +
+                    "The list of sneakers will be less than 51 sneakers and displayed by one page." +
+                    "Test script flow: " +
+                            "1. Initialize an array that contains all of the search key"+
+                            "2. Conduct searching "+
+                            "3. Assert the text on website (headin, title)"+
+                            "4. Generate a for loop to get all the sneakers text name"+
+                            "5. Verify whether the name contains the search key?"
+
+    )
     public void searchSneakerTest01() throws TimeoutException, AWTException {
 
-//        select randomly a keyword
+//        create an array to select a random search key from the array
         this.searchSneakerKeyArr = new String[]{
                 "JORDAN",
                 "LOW",
@@ -145,6 +157,7 @@ public class TSs_SearchSneakers extends TestAbstractClass {
                 "SUPREME",
         };
         this.searchKey = searchSneakerKeyArr[new Random().nextInt(searchSneakerKeyArr.length)];
+
 //        project to SearchProductPage to use method
         SearchProductPage searchPage = new SearchProductPage(driver);
         searchPage.clickOnSearchButton();
@@ -157,6 +170,8 @@ public class TSs_SearchSneakers extends TestAbstractClass {
 //        searchPage.pauseWithTryCatch(750);
 //        searchPage.clickOnPoppedUpSearchButton();
 //        log.info("//------SEARCHED-------//" + "\n");
+
+//        locate elements
         searchPage.setWaitFor(LBL_PAGE_TITLE_LOCATOR);
         String pageTitleGetTxt = driver.findElement(LBL_PAGE_TITLE_LOCATOR).getText();
         searchPage.setWaitFor(LBL_HEADING_TEXT_LOCATOR);
@@ -164,7 +179,7 @@ public class TSs_SearchSneakers extends TestAbstractClass {
         System.out.println("" + pageTitleGetTxt + "\n");
         System.out.println(headingTextGetTxt + "\n");
 
-//        assertion
+//        assertion text elements such as search heading, search title
         if ((pageTitleGetTxt.equalsIgnoreCase(pageTitle) || pageTitleGetTxt.contains(pageTitle))
                 && headingTextGetTxt.equalsIgnoreCase(headingText) || headingTextGetTxt.contains(headingText)) {
 
@@ -177,6 +192,7 @@ public class TSs_SearchSneakers extends TestAbstractClass {
                 System.out.println("Text on web: " + "\"" + pageTitleGetTxt + "\"" + " matched the expected text!" + "\n");
             }
         }
+
 //       assert sneakers name
 //       get number of total sneaker
         int sneakerCounter = driver.findElements(LBL_SNEAKER_NAME_CHILD_LOCATOR).size();
@@ -188,6 +204,8 @@ public class TSs_SearchSneakers extends TestAbstractClass {
             List<WebElement> childListSneakers = driver.findElements(LBL_SNEAKER_NAME_CHILD_LOCATOR);
             String sneakerName = childListSneakers.get(index - 1).getText();
             System.out.println("NAME OF SNEAKER NUMBER " + index + ": " + (childListSneakers.get(index - 1).getText()) + "");
+
+            //assert name of each sneaker
             if (sneakerName.contains(searchKey) == true) {
                 this.checkPointIfPassed = true;
                 this.checkPointIfFailed = false;
@@ -195,8 +213,10 @@ public class TSs_SearchSneakers extends TestAbstractClass {
                 if (checkPointIfPassed && !checkPointIfFailed && !checkPointIfSkipped) {
                     Assert.assertFalse(false);
                     log.info("//------**ASSERTED SNEAKER NUMBER " + index + "!-------//" + "");
+
 //                    add sneaker name to the array
                     sneakersArray.add(sneakerName.toUpperCase(Locale.ROOT));
+
 //                   print out the has-been-added array
                     System.out.println("Sneaker number " + index + " is inserted " +
                             "into the sneakers array: \n" + sneakersArray + "\n");
@@ -209,8 +229,21 @@ public class TSs_SearchSneakers extends TestAbstractClass {
     @Test(groups = {"003"},
             enabled = true,
             priority = -2,
-            description = "searching with no results found")
+            description =
+
+                    "This test case is to check whether alert messages are displayed when sneakers name does not " +
+                            "contain any characters of search key. The list of sneakers will contain no sneakers." +
+
+                            "Test script flow: " +
+                            "1. Initialize an array that contains all of the search key"+
+                            "2. Conduct searching "+
+                            "3. Assert the text on website (heading, title)"+
+                            "4. Assert the alert messages are shown correctly in terms of semantic, spelling"
+
+    )
     public void searchSneakerTest03() throws TimeoutException, AWTException {
+
+//        create an array to select a random search key from the array
         this.searchSneakerKeyArr = new String[]{"AJAX",
                 "SOUL",
                 "JORDAN NIGHT 1 LOW",
@@ -228,6 +261,7 @@ public class TSs_SearchSneakers extends TestAbstractClass {
                 "MC"
         };
         this.searchKey = searchSneakerKeyArr[new Random().nextInt(searchSneakerKeyArr.length)];
+
 //        project to SearchProductPage to use method
         SearchProductPage searchPage = new SearchProductPage(driver);
         searchPage.clickOnSearchButton();
@@ -259,6 +293,7 @@ public class TSs_SearchSneakers extends TestAbstractClass {
                         noResultsFoundTextGetTxt.contains(noResultsFoundText)
                         /* &&  searchKeyGetTxt.equalsIgnoreCase(searchKey) ||
                             searchKeyGetTxt.contains(searchKey) */) {
+
 //            the page title text matches the expected title => true assertion
             this.checkPointIfPassed = true;
             this.checkPointIfFailed = false;
@@ -272,14 +307,27 @@ public class TSs_SearchSneakers extends TestAbstractClass {
             }
         }
     }
-
     @Test(groups = {"002"},
             enabled = true,
             priority = -3,
-            description = "returned list of sneakers is more than one page")
+            description =
+
+                    "This test case is to test the list of returned sneakers that are worked functionally." +
+                            "The list of sneakers will be more than 51 sneakers and displayed by more than one page." +
+                            "Test script flow: " +
+                            "1. Initialize an array that contains all of the search key"+
+                            "2. Conduct searching"+
+                            "3. Assert the text on website (heading, title)"+
+                            "4. Generate a for loop to click on the next button when the page has already asserted"+
+                            "6. Generate a for loop to get all the sneakers text name for comparison"+
+                            "7. Verify whether the name contains the search key?"+
+                            "8. All Sneakers of the last page will be processed separately due to a reason by a for loop"
+
+    )
     public void searchSneakerTest02() throws TimeoutException, AWTException {
         this.searchSneakerKeyArr = new String[] {"A", "B", "S", "N", "M"};
         this.searchKey = searchSneakerKeyArr[new Random().nextInt(searchSneakerKeyArr.length)];
+
 //        project to SearchProductPage to use method
         SearchProductPage searchPage = new SearchProductPage(driver);
         searchPage.clickOnSearchButton();
@@ -289,37 +337,117 @@ public class TSs_SearchSneakers extends TestAbstractClass {
         searchPage.pauseWithTryCatch(750);
         searchPage.clickOnPoppedUpSearchButton();
         log.info("//------SEARCHED-------//" + "\n");
+        searchPage.setWaitFor(LBL_PAGE_TITLE_LOCATOR);
+        String pageTitleGetTxt = driver.findElement(LBL_PAGE_TITLE_LOCATOR).getText();
+        searchPage.setWaitFor(LBL_HEADING_TEXT_LOCATOR);
+        String headingTextGetTxt = driver.findElement(LBL_HEADING_TEXT_LOCATOR).getText();
+        System.out.println("" + pageTitleGetTxt + "\n");
+        System.out.println(headingTextGetTxt + "\n");
 
+//        assertion the search heading, search title
+        if ((pageTitleGetTxt.equalsIgnoreCase(pageTitle) || pageTitleGetTxt.contains(pageTitle))
+                && headingTextGetTxt.equalsIgnoreCase(headingText) || headingTextGetTxt.contains(headingText)) {
+
+//            the page title text matches the expected title => true assertion
+            this.checkPointIfPassed = true;
+            this.checkPointIfFailed = false;
+            this.checkPointIfSkipped = false;
+            if (checkPointIfPassed && !checkPointIfFailed && !checkPointIfSkipped) {
+                Assert.assertFalse(false);
+                System.out.println("Text on web: " + "\"" + pageTitleGetTxt + "\"" + " matched the expected text!" + "\n");
+            }
+        }
+
+//        declare a variable to count the number of click
         int clickIndex=0;
+
+//        declare a variable to count how many times we have to click
         int pageNodeSize= driver.findElements(BTN_PAGE_NODE_LOCATOR).size();
+
+/*        declare a variable to attach label to each sneaker:
+        - the first sneaker: SNEAKER NUMBER 1
+        - the second sneaker: SNEAKER NUMBER 2
+        , ...
+ */
+        int sneakerLabel= 1;
+
 //        System.out.println(pageNodeSize);
+
+//        generate a for loop to verify whether each sneaker name contains the inputted search key
         for (int index = 0; index< pageNodeSize; index++) {
 
+//            get number of sneakers per page
             int listOfSneakersSize= driver.findElements(LBL_SNEAKER_NAME_CHILD_LOCATOR).size();
             System.out.println("Number of sneakers page "+ (index+ 1)+
                     " is: "+ listOfSneakersSize+ " sneakers"+ "\n");
 
-
-
-
-
+//            verify the sneakers name
+            for (int sneakerIndex = 1; sneakerIndex <= listOfSneakersSize; sneakerIndex++) {
+                WebElement listSneakers = driver.findElement(LBL_SNEAKER_NAME_PARENT_LOCATOR);
+                List<WebElement> childListSneakers = driver.findElements(LBL_SNEAKER_NAME_CHILD_LOCATOR);
+                String sneakerName = childListSneakers.get(sneakerIndex - 1).getText();
+                System.out.println("NAME OF SNEAKER NUMBER " + sneakerLabel + ": " + (childListSneakers.get(sneakerLabel - 1).getText()) + "");
+                if (sneakerName.contains(searchKey) == true) {
+                    this.checkPointIfPassed = true;
+                    this.checkPointIfFailed = false;
+                    this.checkPointIfSkipped = false;
+                    if (checkPointIfPassed && !checkPointIfFailed && !checkPointIfSkipped) {
+                        Assert.assertFalse(false);
+                        log.info("//------**ASSERTED SNEAKER NUMBER " + sneakerLabel + "!-------//" + "");
+//                       add sneaker name to the array
+                        sneakersArray.add(sneakerName.toUpperCase());
+//                       print out the has-been-added array
+                        System.out.println("Sneaker number " + sneakerLabel + " is inserted " +
+                                "into the sneakers array: \n" + sneakersArray + "\n");
+                    }
+                }
+                sneakerLabel+=1;
+            }
             WebElement nextButton= driver.findElement(BTN_NEXT_LOCATOR);
             searchPage.executeScrollingDown(5000);
             searchPage.pauseWithTryCatch(550);
             nextButton.click();
             clickIndex+=1;
+
+//            trigger For loop for the last page separately due to an unsolvable problem
             if (clickIndex-1==index && clickIndex==pageNodeSize) {
                 System.out.println("\" //-----**------ THE LAST PAGE --------**-------//\""+ "\n");
                 int listOfSneakersLastPageSize= driver.findElements(LBL_SNEAKER_NAME_CHILD_LOCATOR).size();
                 System.out.println("Number of sneakers page "+ (pageNodeSize+ 1)+
                         " is: "+ listOfSneakersLastPageSize+ " sneakers"+ "\n");
+
+                for (int sneakerIndexLastPage = 1;
+                     sneakerIndexLastPage <= listOfSneakersLastPageSize;
+                     sneakerIndexLastPage++) {
+                    WebElement listSneakersLastPage = driver.findElement(LBL_SNEAKER_NAME_PARENT_LOCATOR);
+                    List<WebElement> childListSneakersLastPage = driver.findElements(LBL_SNEAKER_NAME_CHILD_LOCATOR);
+                    String sneakerNameLastPage = childListSneakersLastPage.get(sneakerIndexLastPage - 1).getText();
+                    System.out.println("NAME OF SNEAKER NUMBER " + sneakerLabel +
+                            ": " + (childListSneakersLastPage.get(sneakerIndexLastPage - 1).getText()) + "");
+                    if (sneakerNameLastPage.contains(searchKey) == true) {
+                        this.checkPointIfPassed = true;
+                        this.checkPointIfFailed = false;
+                        this.checkPointIfSkipped = false;
+                        if (checkPointIfPassed && !checkPointIfFailed && !checkPointIfSkipped) {
+                            Assert.assertFalse(false);
+                            log.info("//------**ASSERTED SNEAKER NUMBER " + sneakerLabel + "!-------//" + "");
+
+//                           add sneaker name to the array
+                            sneakersArray.add(sneakerNameLastPage.toUpperCase(Locale.ROOT));
+
+//                           print out the has-been-added array
+                            System.out.println("Sneaker number " + sneakerLabel + " is inserted " +
+                                    "into the sneakers array: \n" + sneakersArray + "\n");
+                        }
+                    }
+                    sneakerLabel++;
+                }
             }
         }
 
+//        print out the total of sneakers is
+        System.out.println("Total number of sneakers is: "+ (sneakerLabel-1));
     }
-
-
-
 }
 
 
