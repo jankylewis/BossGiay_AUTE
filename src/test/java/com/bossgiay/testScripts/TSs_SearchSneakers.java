@@ -382,10 +382,10 @@ public class TSs_SearchSneakers extends TestAbstractClass {
                     " is: "+ listOfSneakersSize+ " sneakers"+ "\n");
 
 //            verify the sneakers name
-            for (int sneakerIndex = 1; sneakerIndex <= listOfSneakersSize; sneakerIndex++) {
+            for (int sneakerIndex = 0; sneakerIndex < listOfSneakersSize; sneakerIndex++) {
                 WebElement listSneakers = driver.findElement(LBL_SNEAKER_NAME_PARENT_LOCATOR);
-                List<WebElement> childListSneakers = driver.findElements(LBL_SNEAKER_NAME_CHILD_LOCATOR);
-                String sneakerName = childListSneakers.get(sneakerIndex - 1).getText();
+                java.util.List<WebElement> childListSneakers = driver.findElements(LBL_SNEAKER_NAME_CHILD_LOCATOR);
+                String sneakerName = childListSneakers.get(sneakerIndex - 0).getText();
                 System.out.println("NAME OF SNEAKER NUMBER " + sneakerLabel + ": " + (childListSneakers.get(sneakerLabel - 1).getText()) + "");
                 if (sneakerName.contains(searchKey) == true) {
                     this.checkPointIfPassed = true;
@@ -402,6 +402,7 @@ public class TSs_SearchSneakers extends TestAbstractClass {
                     }
                 }
                 sneakerLabel+=1;
+
             }
             WebElement nextButton= driver.findElement(BTN_NEXT_LOCATOR);
             searchPage.executeScrollingDown(5000);
