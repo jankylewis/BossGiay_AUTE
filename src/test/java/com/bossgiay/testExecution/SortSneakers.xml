@@ -6,8 +6,9 @@ Suite">
 
         <groups>
             <run>
-<!--                <include name="bag dsd"></include>-->
-                <include name="002"></include>
+                <include name="bag ABC"></include>
+<!--                <include name="001"></include>-->
+<!--                <include name="002"></include>-->
 <!--                    <include name="003"></include>-->
 <!--                <include name="004"></include>-->
             </run>
