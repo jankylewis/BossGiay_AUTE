@@ -2,6 +2,7 @@ package com.bossgiay.pageObjects;
 
 import com.google.errorprone.annotations.Var;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -61,6 +62,16 @@ public class CollectionPage extends BasePage{
 
     public void executeScrollingDown(double scrollCoordinates) {
         executeScrollingDown(scrollCoordinates, javascript, driver);
+    }
+
+    public boolean isElementPresent(By by, WebDriver driver) {
+        try {
+            driver.findElement(by);
+            return true;
+        }
+        catch (org.openqa.selenium.NoSuchElementException e) {
+            return false;
+        }
     }
 
 }

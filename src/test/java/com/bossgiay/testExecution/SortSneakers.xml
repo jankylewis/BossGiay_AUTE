@@ -6,7 +6,7 @@ Suite">
 
         <groups>
             <run>
-                <include name="slide/sandal"></include>
+                <include name="bag"></include>
 <!--                <include name="002"></include>-->
 <!--                    <include name="003"></include>-->
 <!--                <include name="004"></include>-->
@@ -14,7 +14,7 @@ Suite">
         </groups>
 <!---->
         <classes>
-            <class name="com.bossgiay.testScripts.TSs_SortSneakers" />
+                <class name="com.bossgiay.testScripts.TSs_SortSneakers" />
         </classes>
     </test> <!-- Test -->
 </suite> <!-- Suite -->
