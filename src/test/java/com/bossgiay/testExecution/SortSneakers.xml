@@ -6,11 +6,11 @@ Suite">
 
         <groups>
             <run>
-                <include name="bag ABC"></include>
-<!--                <include name="001"></include>-->
-<!--                <include name="002"></include>-->
-<!--                    <include name="003"></include>-->
-<!--                <include name="004"></include>-->
+<!--                <include name="clothing CBA"></include>-->
+                <include name="001"></include>
+                <include name="002"></include>
+                    <include name="003"></include>
+                <include name="004"></include>
             </run>
         </groups>
 <!---->

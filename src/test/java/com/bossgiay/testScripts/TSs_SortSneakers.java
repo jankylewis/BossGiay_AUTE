@@ -2818,7 +2818,974 @@ public class TSs_SortSneakers extends TestAbstractClass {
             }
         }
     }
+    @Test(groups = {"003", "alphabetical sort", "clothing ABC"},
+            enabled = true,
+            priority = -4,
+            description =
+                    "this test script is facilitate verifying the sort function" +
+                            "whether it works funtionally:" +
+                            "1. Navigate to collection site" +
+                            "2. Select sort category (clothing) dynamically" +
+                            "3. Select sort criteria (alphabetical order)" +
+                            "4. Create an array of clothing name with the first character" +
+                            "5. Assert array of clothing name whether it is sorted by alphabetical order"
+    )
+    public void sortClothingTest03() throws TimeoutException,
+            InterruptedException,
+            NoSuchElementException,
+            CommandLine.ExecutionException {
+        this.listValue=1;
+        CollectionPage collect = new CollectionPage(driver);
 
+//        select sort category by clothing sending a text of Title Attribute (getAttribute)
+        collect.selectDynamicSortCategories("title", clothingCategory, driver);
+        log.info("//--**------------ SELECTED CLOTHING CATEGORY -------------**--//" + "\n");
+
+//        select sort clothing by alphabetical order sending a text
+        collect.selectDynamicSortCriteria(alphaOrderCriteria, driver);
+        log.info("//--**------------ SORTED BY ALPHABETICAL ORDER -------------**--//" + "\n");
+//        collect.setWaitFor(LBL_CATEGORY_TITLE_LOCATOR);
+        String clothingCategoryGetTxt = driver.findElement(LBL_CATEGORY_TITLE_LOCATOR).getText();
+        System.out.println("" + clothingCategoryGetTxt + "\n");
+
+//       assert clothing title
+        if (clothingCategoryGetTxt.equalsIgnoreCase(clothingTitle)) {
+
+//            the clothing title text matches the expected title => true assertion
+            this.checkPointIfPassed = true;
+            this.checkPointIfFailed = false;
+            this.checkPointIfSkipped = false;
+            if (checkPointIfPassed && !checkPointIfFailed && !checkPointIfSkipped) {
+                Assert.assertFalse(false);
+                System.out.println("Text on web: " + "\"" + clothingCategoryGetTxt +
+                        "\"" + " matched the expected text!" + "\n");
+            }
+        } else {
+            this.checkPointIfPassed = false;
+            this.checkPointIfFailed = true;
+            this.checkPointIfSkipped = false;
+            if (checkPointIfFailed) {
+                Assert.assertFalse(true);
+                System.out.println("Text on web: " + "\"" + clothingCategoryGetTxt + "\"" +
+                        " did not match the expected text!" + "\n");
+            }
+        }
+
+        if (listValue==1) {
+
+/*        declare a variable to attach label to each clothing:
+        - the first clothing: CLOTHING NUMBER 1
+        - the second clothing: CLOTHING NUMBER 2
+        , ...
+ */
+            int clothingLabel = 1;
+            int indexClothingNameArray = 0;
+            int listOfClothingSize = driver.findElements(LBL_CLOTHING_NAME_CHILD_LOCATOR).size();
+            for (int clothingIndex = 0; clothingIndex < listOfClothingSize; clothingIndex++) {
+                org.openqa.selenium.WebElement listClothing =
+                        driver.findElement(LBL_CLOTHING_NAME_PARENT_LOCATOR);
+                java.util.List<WebElement> childListClothing = driver.findElements(LBL_CLOTHING_NAME_CHILD_LOCATOR);
+                String clothingName = childListClothing.get(clothingIndex).getText();
+                System.out.println("NAME OF CLOTHING NUMBER " + clothingLabel + ": " + clothingName + "");
+                clothingNameList.add(clothingName);
+                System.out.println(clothingNameList);
+                clothingLabel++;
+            }
+            System.out.println("\n" + "//-------------//" + "\n");
+            System.out.println("\n" + "LIST OF CLOTHING NAME BEFORE PROCESSING: " + clothingNameList + "\n");
+            System.out.println("\n" + "//-------------//" + "\n");
+            for (int indexInClothingNameList = 0;
+                 indexInClothingNameList < clothingNameList.size();
+                 indexInClothingNameList++) {
+
+//            get the first letter of clothing name then insert it into a new list
+                char frstLetterOfClothingName = (clothingNameList.get(indexInClothingNameList)).charAt(0);
+                frstCharClothingNameList.add(frstLetterOfClothingName);
+            }
+            System.out.println("\n" + "//-------------//" + "\n");
+            System.out.println("\n" + "LIST OF CLOTHING NAME AFTER PROCESSING: " + frstCharClothingNameList + "\n");
+            System.out.println("\n" + "//-------------//" + "\n");
+
+/*              assertion of clothing name whether list of first
+                letter of clothing name is following alphabetical order         */
+            for (int indexInClothingNameList = 0;
+                 indexInClothingNameList < frstCharClothingNameList.size();
+                 indexInClothingNameList++) {
+                if (frstCharClothingNameList.get(indexInClothingNameList)
+                        .compareTo(frstCharClothingNameList.get(indexInClothingNameList+ 1))<= 0) {
+                    log.info("\n\n//-----**------ ASSERTED SUCCESSFULLY " +
+                            "CLOTHING NAME NUMBER " + (indexInClothingNameList+ 1) + " --------**-------//" + "\n\n");
+                    this.checkPointIfPassed = true;
+                    this.checkPointIfSkipped = false;
+                    if (this.checkPointIfPassed == true && this.checkPointIfSkipped == false) {
+                        Assert.assertFalse(false);
+                    }
+                } else { //the previous bag name comes before the next bag name in the ASCII order
+                    log.info("\n\n//-----**------ ASSERTED UNSUCCESSFULLY " +
+                            "CLOTHING NAME NUMBER " + (indexInClothingNameList + 1) + " --------**-------//" + "\n\n");
+                    this.checkPointIfFailed = true;
+                    this.checkPointIfSkipped = false;
+                    if (this.checkPointIfFailed == true && this.checkPointIfSkipped == false) {
+                        Assert.assertFalse(true);
+                    }
+                }
+            }
+        }
+        else if (listValue> 1) {
+//            declare a variable to count the number of click
+            int clickIndex = 0;
+
+//        declare a variable to count how many times we have to click
+            int pageNodeSize = driver.findElements(BTN_PAGE_NODE_LOCATOR).size();
+
+/*        declare a variable to attach label to each clothing:
+        - the first clothing: CLOTHING NUMBER 1
+        - the second clothing: CLOTHING NUMBER 2
+        , ...
+ */
+            int clothingLabel = 1;
+            int indexClothingNameArray = 0;
+            System.out.println("Number of page: " + (pageNodeSize + 1) + "");
+            for (int index = 0; index < pageNodeSize; index++) {
+
+//            get number of bags per page
+                int listOfClothingSize = driver.findElements(LBL_CLOTHING_NAME_CHILD_LOCATOR).size();
+                System.out.println("\n" + "Number of clothing page " + (index + 1) +
+                        " is: " + listOfClothingSize + " clothing" + "\n");
+                for (int clothingIndex = 0; clothingIndex < listOfClothingSize; clothingIndex++) {
+                    WebElement listClothing = driver.findElement(LBL_CLOTHING_NAME_PARENT_LOCATOR);
+                    java.util.List<WebElement> childListClothing = driver.findElements(LBL_CLOTHING_NAME_CHILD_LOCATOR);
+                    String clothingName = childListClothing.get(clothingIndex - 0).getText();
+                    System.out.println("NAME OF CLOTHING NUMBER " + clothingLabel + ": " + clothingName + "");
+                    clothingNameList.add(clothingName);
+                    System.out.println(clothingNameList);
+                    clothingLabel++;
+                }
+                WebElement nextButton = driver.findElement(BTN_NEXT_LOCATOR);
+                ((JavascriptExecutor) driver).executeScript("scroll(0,6000)");
+                collect.pauseWithTryCatch(1550);
+                nextButton.click();
+                clickIndex += 1;
+                if (clickIndex - 1 == index && clickIndex == pageNodeSize) {
+                    System.out.println("\n" + "\" //-----**------ THE LAST PAGE --------**-------//\"" + "\n");
+                    int listOfClothingLastPageSize = driver.findElements(LBL_CLOTHING_NAME_CHILD_LOCATOR).size();
+                    System.out.println("Number of clothing page " + (pageNodeSize + 1) +
+                            " is: " + listOfClothingLastPageSize + " bags" + "\n");
+                    for (int clothingIndexLastPage = 0;
+                         clothingIndexLastPage < listOfClothingLastPageSize; clothingIndexLastPage++) {
+                        WebElement listClothingLastPage = driver.findElement(LBL_CLOTHING_NAME_PARENT_LOCATOR);
+                        java.util.List<WebElement> childListClothingLastPage = driver.findElements(LBL_CLOTHING_NAME_CHILD_LOCATOR);
+                        String clothingNameLastPage =
+                                childListClothingLastPage.get(clothingIndexLastPage - 0).getText();
+                        System.out.println("NAME OF CLOTHING NUMBER " + clothingLabel + ": " + clothingNameLastPage + "");
+                        clothingNameList.add(clothingNameLastPage);
+                        System.out.println(clothingNameList);
+                        clothingLabel++;
+                    }
+                }
+            }
+            System.out.println("\n" + "//-------------//" + "\n");
+            System.out.println("\n" + "LIST OF CLOTHING NAME BEFORE PROCESSING: " + clothingNameList + "\n");
+            System.out.println("\n" + "//-------------//" + "\n");
+            for (int indexInClothingNameList = 0;
+                 indexInClothingNameList < clothingNameList.size();
+                 indexInClothingNameList++) {
+
+//            get the first letter of clothing name then insert it into a new list
+                char frstLetterOfClothingName = (clothingNameList.get(indexInClothingNameList)).charAt(0);
+                frstCharClothingNameList.add(frstLetterOfClothingName);
+            }
+            System.out.println("\n" + "//-------------//" + "\n");
+            System.out.println("\n" + "LIST OF CLOTHING NAME AFTER PROCESSING: " + frstCharClothingNameList + "\n");
+            System.out.println("\n" + "//-------------//" + "\n");
+
+/*        assertion of clothing name whether list of first
+        letter of clothing name is following alphabetical order */
+            for (int indexInClothingNameList = 0;
+                 indexInClothingNameList < frstCharClothingNameList.size();
+                 indexInClothingNameList++) {
+                if (frstCharClothingNameList.get(indexInClothingNameList)
+                        .compareTo(frstCharClothingNameList.get(indexInClothingNameList + 1))<= 0) {
+                    log.info("\n\n//-----**------ ASSERTED SUCCESSFULLY " +
+                            "CLOTHING NAME NUMBER " + (indexInClothingNameList + 1) + " --------**-------//" + "\n\n");
+                    this.checkPointIfPassed = true;
+                    this.checkPointIfSkipped = false;
+                    if (this.checkPointIfPassed == true && this.checkPointIfSkipped == false) {
+                        Assert.assertFalse(false);
+                    }
+                } else { //the previous clothing name comes before the next clothing name in the ASCII order
+                    log.info("\n\n//-----**------ ASSERTED UNSUCCESSFULLY " +
+                            "CLOTHING NAME NUMBER " + (indexInClothingNameList + 1) + " --------**-------//" + "\n\n");
+                    this.checkPointIfFailed = true;
+                    this.checkPointIfSkipped = false;
+                    if (this.checkPointIfFailed == true && this.checkPointIfSkipped == false) {
+                        Assert.assertFalse(true);
+                    }
+                }
+            }
+        }
+    }
+
+    @Test(groups = {"004", "non-alphabetical sort", "sneaker CBA"},
+            enabled = true,
+            priority = -4,
+            description =
+                    "this test script is facilitate verifying the sort function" +
+                            "whether it works funtionally:" +
+                            "1. Navigate to collection site" +
+                            "2. Select sort category (sneaker) dynamically" +
+                            "3. Select sort criteria (non-alphabetical order)" +
+                            "4. Create an array of sneaker name with the first character" +
+                            "5. Assert array of sneaker name whether it is sorted by non-alphabetical order"
+    )
+    public void sortSneakerTest04() throws TimeoutException,
+            InterruptedException,
+            NoSuchElementException,
+            CommandLine.ExecutionException {
+        CollectionPage collect = new CollectionPage(driver);
+
+//        select sort category by sneaker sending a text of Title Attribute (getAttribute)
+        collect.selectDynamicSortCategories("title", sneakerCategory, driver);
+        log.info("//--**------------ SELECTED SNEAKER CATEGORY -------------**--//" + "\n");
+
+//        select sort sneakers by alphabetical order sending a text
+        collect.selectDynamicSortCriteria(nonAlphaOrderCriteria, driver);
+        log.info("//--**------------ SORTED BY NON-ALPHABETICAL ORDER -------------**--//" + "\n");
+//        collect.setWaitFor(LBL_CATEGORY_TITLE_LOCATOR);
+        String sneakerCategoryGetTxt = driver.findElement(LBL_CATEGORY_TITLE_LOCATOR).getText();
+        System.out.println("" + sneakerCategoryGetTxt + "\n");
+
+        //        assert sneaker title
+        if (sneakerCategoryGetTxt.equalsIgnoreCase(sneakerTitle)) {
+
+//            the sneaker title text matches the expected title => true assertion
+            this.checkPointIfPassed = true;
+            this.checkPointIfFailed = false;
+            this.checkPointIfSkipped = false;
+            if (checkPointIfPassed && !checkPointIfFailed && !checkPointIfSkipped) {
+                Assert.assertFalse(false);
+                System.out.println("Text on web: " + "\"" + sneakerCategoryGetTxt +
+                        "\"" + " matched the expected text!" + "\n");
+            }
+        } else {
+            this.checkPointIfPassed = false;
+            this.checkPointIfFailed = true;
+            this.checkPointIfSkipped = false;
+            if (checkPointIfFailed) {
+                Assert.assertFalse(true);
+                System.out.println("Text on web: " + "\"" + sneakerCategoryGetTxt + "\"" +
+                        " did not match the expected text!" + "\n");
+            }
+        }
+
+//        declare a variable to count the number of click
+        int clickIndex = 0;
+
+//        declare a variable to count how many times we have to click
+        int pageNodeSize = driver.findElements(BTN_PAGE_NODE_LOCATOR).size();
+
+/*        declare a variable to attach label to each sneaker:
+        - the first sneaker: SNEAKER NUMBER 1
+        - the second sneaker: SNEAKER NUMBER 2
+        , ...
+ */
+        int sneakerLabel = 1;
+        int indexSneakerNameArray = 0;
+        System.out.println("Number of page: " + (pageNodeSize + 1) + "");
+        for (int index = 0; index < pageNodeSize; index++) {
+
+//            get number of sneakers per page
+            int listOfSneakersSize = driver.findElements(LBL_SNEAKER_NAME_CHILD_LOCATOR).size();
+            System.out.println("\n" + "Number of sneakers page " + (index + 1) +
+                    " is: " + listOfSneakersSize + " sneakers" + "\n");
+            for (int sneakerIndex = 0; sneakerIndex < listOfSneakersSize; sneakerIndex++) {
+                WebElement listSneakers = driver.findElement(LBL_SNEAKER_NAME_PARENT_LOCATOR);
+                java.util.List<WebElement> childListSneakers = driver.findElements(LBL_SNEAKER_NAME_CHILD_LOCATOR);
+                String sneakerName = childListSneakers.get(sneakerIndex - 0).getText();
+                System.out.println("NAME OF SNEAKER NUMBER " + sneakerLabel + ": " + sneakerName + "");
+                sneakersNameList.add(sneakerName);
+                System.out.println(sneakersNameList);
+                sneakerLabel++;
+            }
+            WebElement nextButton = driver.findElement(BTN_NEXT_LOCATOR);
+            ((JavascriptExecutor) driver).executeScript("scroll(0,6000)");
+            collect.pauseWithTryCatch(1550);
+            nextButton.click();
+            clickIndex += 1;
+            if (clickIndex - 1 == index && clickIndex == pageNodeSize) {
+                System.out.println("\n" + "\" //-----**------ THE LAST PAGE --------**-------//\"" + "\n");
+                int listOfSneakersLastPageSize = driver.findElements(LBL_SNEAKER_NAME_CHILD_LOCATOR).size();
+                System.out.println("Number of sneakers page " + (pageNodeSize + 1) +
+                        " is: " + listOfSneakersLastPageSize + " sneakers" + "\n");
+                for (int sneakerIndexLastPage = 0; sneakerIndexLastPage < listOfSneakersLastPageSize; sneakerIndexLastPage++) {
+                    WebElement listSneakersLastPage = driver.findElement(LBL_SNEAKER_NAME_PARENT_LOCATOR);
+                    java.util.List<WebElement> childListSneakerslastPage = driver.findElements(LBL_SNEAKER_NAME_CHILD_LOCATOR);
+                    String sneakerNameLastPage = childListSneakerslastPage.get(sneakerIndexLastPage - 0).getText();
+                    System.out.println("NAME OF SNEAKER NUMBER " + sneakerLabel + ": " + sneakerNameLastPage + "");
+                    sneakersNameList.add(sneakerNameLastPage);
+                    System.out.println(sneakersNameList);
+                    sneakerLabel++;
+                }
+            }
+        }
+        System.out.println("\n" + "//-------------//" + "\n");
+        System.out.println("\n" + "LIST OF SNEAKERS NAME BEFORE PROCESSING: " + sneakersNameList + "\n");
+        System.out.println("\n" + "//-------------//" + "\n");
+        for (int indexInSnkNameList = 0;
+             indexInSnkNameList < sneakersNameList.size();
+             indexInSnkNameList++) {
+
+//            get the first letter of sneaker name then insert it into a new list
+            char frstLetterOfSnkName = (sneakersNameList.get(indexInSnkNameList)).charAt(0);
+            frstCharSnkNameList.add(frstLetterOfSnkName);
+        }
+        System.out.println("\n" + "//-------------//" + "\n");
+        System.out.println("\n" + "LIST OF SNEAKERS NAME AFTER PROCESSING: " + frstCharSnkNameList + "\n");
+        System.out.println("\n" + "//-------------//" + "\n");
+
+/*        assertion of sneakers name whether list of first
+        letter of sneakers name is following non-alphabetical order */
+        for (int indexInSnkNameList = 0;
+             indexInSnkNameList < frstCharSnkNameList.size();
+             indexInSnkNameList++) {
+            if (frstCharSnkNameList.get(indexInSnkNameList)
+                    .compareTo(frstCharSnkNameList.get(indexInSnkNameList + 1))>= 0) {
+                log.info("\n\n//-----**------ ASSERTED SUCCESSFULLY " +
+                        "SNEAKER NAME NUMBER " + (indexInSnkNameList + 1) + " --------**-------//" + "\n\n");
+                this.checkPointIfPassed = true;
+                this.checkPointIfSkipped = false;
+                if (this.checkPointIfPassed == true && this.checkPointIfSkipped == false) {
+                    Assert.assertFalse(false);
+                }
+            } else { //the previous sneaker name comes after the next sneaker name in the ASCII order
+                log.info("\n\n//-----**------ ASSERTED UNSUCCESSFULLY " +
+                        "SNEAKER NAME NUMBER " + (indexInSnkNameList + 1) + " --------**-------//" + "\n\n");
+                this.checkPointIfFailed = true;
+                this.checkPointIfSkipped = false;
+                if (this.checkPointIfFailed == true && this.checkPointIfSkipped == false) {
+                    Assert.assertFalse(true);
+                }
+            }
+        }
+    }
+    @Test(groups = {"004", "non-alphabetical sort", "slide/sandal CBA"},
+            enabled = true,
+            priority = -4,
+            description =
+                    "this test script is facilitate verifying the sort function" +
+                            "whether it works funtionally:" +
+                            "1. Navigate to collection site" +
+                            "2. Select sort category (slide/sandal) dynamically" +
+                            "3. Select sort criteria (non-alphabetical order)" +
+                            "4. Create an array of slide/sandal name with the first character" +
+                            "5. Assert array of slide/sandal name whether it is sorted by non-alphabetical order"
+    )
+    public void sortSSTest04() throws TimeoutException,
+            InterruptedException,
+            NoSuchElementException,
+            CommandLine.ExecutionException {
+        this.listValue=1;
+        CollectionPage collect = new CollectionPage(driver);
+
+//        select sort category by slide/sandal sending a text of Title Attribute (getAttribute)
+        collect.selectDynamicSortCategories("title", slideSandalCategory, driver);
+        log.info("//--**------------ SELECTED SLIDE/SANDAL CATEGORY -------------**--//" + "\n");
+
+//        select sort slides/sandals by alphabetical order sending a text
+        collect.selectDynamicSortCriteria(nonAlphaOrderCriteria, driver);
+        log.info("//--**------------ SORTED BY NON-ALPHABETICAL ORDER -------------**--//" + "\n");
+//        collect.setWaitFor(LBL_CATEGORY_TITLE_LOCATOR);
+        String ssCategoryGetTxt = driver.findElement(LBL_CATEGORY_TITLE_LOCATOR).getText();
+        System.out.println("" + ssCategoryGetTxt + "\n");
+
+        //        assert slide/sandal title
+        if (ssCategoryGetTxt.equalsIgnoreCase(slideSandalTitle)) {
+
+//            the slide/sandal title text matches the expected title => true assertion
+            this.checkPointIfPassed = true;
+            this.checkPointIfFailed = false;
+            this.checkPointIfSkipped = false;
+            if (checkPointIfPassed && !checkPointIfFailed && !checkPointIfSkipped) {
+                Assert.assertFalse(false);
+                System.out.println("Text on web: " + "\"" + ssCategoryGetTxt +
+                        "\"" + " matched the expected text!" + "\n");
+            }
+        } else {
+            this.checkPointIfPassed = false;
+            this.checkPointIfFailed = true;
+            this.checkPointIfSkipped = false;
+            if (checkPointIfFailed) {
+                Assert.assertFalse(true);
+                System.out.println("Text on web: " + "\"" + ssCategoryGetTxt + "\"" +
+                        " did not match the expected text!" + "\n");
+            }
+        }
+
+        if (listValue==1) {
+
+/*        declare a variable to attach label to each slide/sandal:
+        - the first slide/sandal: SLIDE/SANDAL NUMBER 1
+        - the second slide/sandal: SLIDE/SANDAL NUMBER 2
+        , ...
+ */
+            int ssLabel = 1;
+            int indexSSNameArray = 0;
+            int listOfSSSize = driver.findElements(LBL_SLIDE_SANDAL_NAME_CHILD_LOCATOR).size();
+            for (int ssIndex = 0; ssIndex < listOfSSSize; ssIndex++) {
+                org.openqa.selenium.WebElement listSS =
+                        driver.findElement(LBL_SLIDE_SANDAL_NAME_PARENT_LOCATOR);
+                java.util.List<WebElement> childListSS = driver.findElements(LBL_SLIDE_SANDAL_NAME_CHILD_LOCATOR);
+                String ssName = childListSS.get(ssIndex).getText();
+                System.out.println("NAME OF SLIDE/SANDAL NUMBER " + ssLabel + ": " + ssName + "");
+                ssNameList.add(ssName);
+                System.out.println(ssNameList);
+                ssLabel++;
+            }
+            System.out.println("\n" + "//-------------//" + "\n");
+            System.out.println("\n" + "LIST OF SLIDES/SANDALS NAME BEFORE PROCESSING: " + ssNameList + "\n");
+            System.out.println("\n" + "//-------------//" + "\n");
+            for (int indexInSSNameList = 0;
+                 indexInSSNameList < ssNameList.size();
+                 indexInSSNameList++) {
+
+//            get the first letter of slide/sandal name then insert it into a new list
+                char frstLetterOfSSName = (ssNameList.get(indexInSSNameList)).charAt(0);
+                frstCharSSNameList.add(frstLetterOfSSName);
+            }
+            System.out.println("\n" + "//-------------//" + "\n");
+            System.out.println("\n" + "LIST OF SLIDES/SANDALS NAME AFTER PROCESSING: " + frstCharSSNameList + "\n");
+            System.out.println("\n" + "//-------------//" + "\n");
+
+/*              assertion of slides/sandals name whether list of first
+                letter of slides/sandals name is following non-alphabetical order         */
+            for (int indexInSSNameList = 0;
+                 indexInSSNameList < frstCharSSNameList.size();
+                 indexInSSNameList++) {
+                if (frstCharSSNameList.get(indexInSSNameList)
+                        .compareTo(frstCharSSNameList.get(indexInSSNameList + 1))>= 0) {
+                    log.info("\n\n//-----**------ ASSERTED SUCCESSFULLY " +
+                            "SLIDE/SANDAL NAME NUMBER " + (indexInSSNameList + 1) + " --------**-------//" + "\n\n");
+                    this.checkPointIfPassed = true;
+                    this.checkPointIfSkipped = false;
+                    if (this.checkPointIfPassed == true && this.checkPointIfSkipped == false) {
+                        Assert.assertFalse(false);
+                    }
+                } else { //the previous slide/sandal name comes before the next slide/sandal name in the ASCII order
+                    log.info("\n\n//-----**------ ASSERTED UNSUCCESSFULLY " +
+                            "SLIDE/SANDAL NAME NUMBER " + (indexInSSNameList + 1) + " --------**-------//" + "\n\n");
+                    this.checkPointIfFailed = true;
+                    this.checkPointIfSkipped = false;
+                    if (this.checkPointIfFailed == true && this.checkPointIfSkipped == false) {
+                        Assert.assertFalse(true);
+                    }
+                }
+            }
+        }
+        else if (listValue> 1) {
+//            declare a variable to count the number of click
+            int clickIndex = 0;
+
+//        declare a variable to count how many times we have to click
+            int pageNodeSize = driver.findElements(BTN_PAGE_NODE_LOCATOR).size();
+
+/*        declare a variable to attach label to each slide/sandal:
+        - the first slide/sandal: SLIDE/SANDAL NUMBER 1
+        - the second slide/sandal: SLIDE/SANDAL NUMBER 2
+        , ...
+ */
+            int ssLabel = 1;
+            int indexSSNameArray = 0;
+            System.out.println("Number of page: " + (pageNodeSize + 1) + "");
+            for (int index = 0; index < pageNodeSize; index++) {
+
+//            get number of slides/sandals per page
+                int listOfSSSize = driver.findElements(LBL_SLIDE_SANDAL_NAME_CHILD_LOCATOR).size();
+                System.out.println("\n" + "Number of slides/sandals page " + (index + 1) +
+                        " is: " + listOfSSSize + " slides/sandals" + "\n");
+                for (int ssIndex = 0; ssIndex < listOfSSSize; ssIndex++) {
+                    WebElement listSS = driver.findElement(LBL_SLIDE_SANDAL_NAME_PARENT_LOCATOR);
+                    java.util.List<WebElement> childListSS = driver.findElements(LBL_SLIDE_SANDAL_NAME_CHILD_LOCATOR);
+                    String ssName = childListSS.get(ssIndex - 0).getText();
+                    System.out.println("NAME OF SLIDE/SANDAL NUMBER " + ssLabel + ": " + ssName + "");
+                    ssNameList.add(ssName);
+                    System.out.println(ssNameList);
+                    ssLabel++;
+                }
+                WebElement nextButton = driver.findElement(BTN_NEXT_LOCATOR);
+                ((JavascriptExecutor) driver).executeScript("scroll(0,6000)");
+                collect.pauseWithTryCatch(1550);
+                nextButton.click();
+                clickIndex += 1;
+                if (clickIndex - 1 == index && clickIndex == pageNodeSize) {
+                    System.out.println("\n" + "\" //-----**------ THE LAST PAGE --------**-------//\"" + "\n");
+                    int listOfSSLastPageSize = driver.findElements(LBL_SLIDE_SANDAL_NAME_CHILD_LOCATOR).size();
+                    System.out.println("Number of slides/sandals page " + (pageNodeSize + 1) +
+                            " is: " + listOfSSLastPageSize + " slides/dandals" + "\n");
+                    for (int ssIndexLastPage = 0; ssIndexLastPage < listOfSSLastPageSize; ssIndexLastPage++) {
+                        WebElement listSSLastPage = driver.findElement(LBL_SLIDE_SANDAL_NAME_PARENT_LOCATOR);
+                        java.util.List<WebElement> childListSSlastPage = driver.findElements(LBL_SLIDE_SANDAL_NAME_CHILD_LOCATOR);
+                        String ssNameLastPage = childListSSlastPage.get(ssIndexLastPage - 0).getText();
+                        System.out.println("NAME OF SLIDE/SANDAL NUMBER " + ssLabel + ": " + ssNameLastPage + "");
+                        ssNameList.add(ssNameLastPage);
+                        System.out.println(ssNameList);
+                        ssLabel++;
+                    }
+                }
+            }
+            System.out.println("\n" + "//-------------//" + "\n");
+            System.out.println("\n" + "LIST OF SLIDES/SANDALS NAME BEFORE PROCESSING: " + ssNameList + "\n");
+            System.out.println("\n" + "//-------------//" + "\n");
+            for (int indexInSSNameList = 0;
+                 indexInSSNameList < ssNameList.size();
+                 indexInSSNameList++) {
+
+//            get the first letter of slide/sandal name then insert it into a new list
+                char frstLetterOfSSName = (ssNameList.get(indexInSSNameList)).charAt(0);
+                frstCharSSNameList.add(frstLetterOfSSName);
+            }
+            System.out.println("\n" + "//-------------//" + "\n");
+            System.out.println("\n" + "LIST OF SLIDES/SANDALS NAME AFTER PROCESSING: " + frstCharSSNameList + "\n");
+            System.out.println("\n" + "//-------------//" + "\n");
+
+/*        assertion of slides/sandals name whether list of first
+        letter of slides/sandals name is following non-alphabetical order */
+            for (int indexInSSNameList = 0;
+                 indexInSSNameList < frstCharSSNameList.size();
+                 indexInSSNameList++) {
+                if (frstCharSSNameList.get(indexInSSNameList)
+                        .compareTo(frstCharSSNameList.get(indexInSSNameList + 1))>= 0) {
+                    log.info("\n\n//-----**------ ASSERTED SUCCESSFULLY " +
+                            "SLIDE/SANDAL NAME NUMBER " + (indexInSSNameList + 1) + " --------**-------//" + "\n\n");
+                    this.checkPointIfPassed = true;
+                    this.checkPointIfSkipped = false;
+                    if (this.checkPointIfPassed == true && this.checkPointIfSkipped == false) {
+                        Assert.assertFalse(false);
+                    }
+                } else { //the previous slide/sandal name comes after the next slide/sandal name in the ASCII order
+                    log.info("\n\n//-----**------ ASSERTED UNSUCCESSFULLY " +
+                            "SLIDE/SANDAL NAME NUMBER " + (indexInSSNameList + 1) + " --------**-------//" + "\n\n");
+                    this.checkPointIfFailed = true;
+                    this.checkPointIfSkipped = false;
+                    if (this.checkPointIfFailed == true && this.checkPointIfSkipped == false) {
+                        Assert.assertFalse(true);
+                    }
+                }
+            }
+        }
+    }
+    @Test(groups = {"004", "non-alphabetical sort", "bag CBA"},
+            enabled = true,
+            priority = -4,
+            description =
+                    "this test script is facilitate verifying the sort function" +
+                            "whether it works funtionally:" +
+                            "1. Navigate to collection site" +
+                            "2. Select sort category (bag) dynamically" +
+                            "3. Select sort criteria (non-alphabetical order)" +
+                            "4. Create an array of bag name with the first character" +
+                            "5. Assert array of bag name whether it is sorted by non-alphabetical order"
+    )
+    public void sortBagTest04() throws TimeoutException,
+            InterruptedException,
+            NoSuchElementException,
+            CommandLine.ExecutionException {
+        this.listValue=1;
+        CollectionPage collect = new CollectionPage(driver);
+
+//        select sort category by bag sending a text of Title Attribute (getAttribute)
+        collect.selectDynamicSortCategories("title", bagCategory, driver);
+        log.info("//--**------------ SELECTED BAG CATEGORY -------------**--//" + "\n");
+
+//        select sort bags by non-alphabetical order sending a text
+        collect.selectDynamicSortCriteria(nonAlphaOrderCriteria, driver);
+        log.info("//--**------------ SORTED BY NON-ALPHABETICAL ORDER -------------**--//" + "\n");
+//        collect.setWaitFor(LBL_CATEGORY_TITLE_LOCATOR);
+        String bagCategoryGetTxt = driver.findElement(LBL_CATEGORY_TITLE_LOCATOR).getText();
+        System.out.println("" + bagCategoryGetTxt + "\n");
+
+        //        assert bag title
+        if (bagCategoryGetTxt.equalsIgnoreCase(bagTitle)) {
+
+//            the bag title text matches the expected title => true assertion
+            this.checkPointIfPassed = true;
+            this.checkPointIfFailed = false;
+            this.checkPointIfSkipped = false;
+            if (checkPointIfPassed && !checkPointIfFailed && !checkPointIfSkipped) {
+                Assert.assertFalse(false);
+                System.out.println("Text on web: " + "\"" + bagCategoryGetTxt +
+                        "\"" + " matched the expected text!" + "\n");
+            }
+        } else {
+            this.checkPointIfPassed = false;
+            this.checkPointIfFailed = true;
+            this.checkPointIfSkipped = false;
+            if (checkPointIfFailed) {
+                Assert.assertFalse(true);
+                System.out.println("Text on web: " + "\"" + bagCategoryGetTxt + "\"" +
+                        " did not match the expected text!" + "\n");
+            }
+        }
+
+        if (listValue==1) {
+
+/*        declare a variable to attach label to each bag:
+        - the first bag: BAG NUMBER 1
+        - the second bag: BAG NUMBER 2
+        , ...
+ */
+            int bagLabel = 1;
+            int indexBagNameArray = 0;
+            int listOfBagSize = driver.findElements(LBL_BAG_NAME_CHILD_LOCATOR).size();
+            for (int bagIndex = 0; bagIndex < listOfBagSize; bagIndex++) {
+                org.openqa.selenium.WebElement listBag =
+                        driver.findElement(LBL_BAG_NAME_PARENT_LOCATOR);
+                java.util.List<WebElement> childListBag = driver.findElements(LBL_BAG_NAME_CHILD_LOCATOR);
+                String bagName = childListBag.get(bagIndex).getText();
+                System.out.println("NAME OF BAG NUMBER " + bagLabel + ": " + bagName + "");
+                bagNameList.add(bagName);
+                System.out.println(bagNameList);
+                bagLabel++;
+            }
+            System.out.println("\n" + "//-------------//" + "\n");
+            System.out.println("\n" + "LIST OF BAGS NAME BEFORE PROCESSING: " + bagNameList + "\n");
+            System.out.println("\n" + "//-------------//" + "\n");
+            for (int indexInBagNameList = 0;
+                 indexInBagNameList < bagNameList.size();
+                 indexInBagNameList++) {
+
+//            get the first letter of bag name then insert it into a new list
+                char frstLetterOfBagName = (bagNameList.get(indexInBagNameList)).charAt(0);
+                frstCharBagNameList.add(frstLetterOfBagName);
+            }
+            System.out.println("\n" + "//-------------//" + "\n");
+            System.out.println("\n" + "LIST OF BAGS NAME AFTER PROCESSING: " + frstCharBagNameList + "\n");
+            System.out.println("\n" + "//-------------//" + "\n");
+
+/*              assertion of bags name whether list of first
+                letter of bags name is following reversely alphabetical order         */
+            for (int indexInBagNameList = 0;
+                 indexInBagNameList < frstCharBagNameList.size();
+                 indexInBagNameList++) {
+                if (frstCharBagNameList.get(indexInBagNameList)
+                        .compareTo(frstCharBagNameList.get(indexInBagNameList+ 1))>= 0) {
+                    log.info("\n\n//-----**------ ASSERTED SUCCESSFULLY " +
+                            "BAG NAME NUMBER " + (indexInBagNameList+ 1) + " --------**-------//" + "\n\n");
+                    this.checkPointIfPassed = true;
+                    this.checkPointIfSkipped = false;
+                    if (this.checkPointIfPassed == true && this.checkPointIfSkipped == false) {
+                        Assert.assertFalse(false);
+                    }
+                } else { //the previous bag name comes after the next bag name in the ASCII order
+                    log.info("\n\n//-----**------ ASSERTED UNSUCCESSFULLY " +
+                            "BAG NAME NUMBER " + (indexInBagNameList + 1) + " --------**-------//" + "\n\n");
+                    this.checkPointIfFailed = true;
+                    this.checkPointIfSkipped = false;
+                    if (this.checkPointIfFailed == true && this.checkPointIfSkipped == false) {
+                        Assert.assertFalse(true);
+                    }
+                }
+            }
+        }
+        else if (listValue> 1) {
+//            declare a variable to count the number of click
+            int clickIndex = 0;
+
+//        declare a variable to count how many times we have to click
+            int pageNodeSize = driver.findElements(BTN_PAGE_NODE_LOCATOR).size();
+
+/*        declare a variable to attach label to each bag:
+        - the first bag: BAG NUMBER 1
+        - the second bag: BAG NUMBER 2
+        , ...
+ */
+            int bagLabel = 1;
+            int indexBagNameArray = 0;
+            System.out.println("Number of page: " + (pageNodeSize + 1) + "");
+            for (int index = 0; index < pageNodeSize; index++) {
+
+//            get number of bags per page
+                int listOfBagSize = driver.findElements(LBL_BAG_NAME_CHILD_LOCATOR).size();
+                System.out.println("\n" + "Number of bags page " + (index + 1) +
+                        " is: " + listOfBagSize + " bags" + "\n");
+                for (int bagIndex = 0; bagIndex < listOfBagSize; bagIndex++) {
+                    WebElement listBag = driver.findElement(LBL_BAG_NAME_PARENT_LOCATOR);
+                    java.util.List<WebElement> childListBag = driver.findElements(LBL_BAG_NAME_CHILD_LOCATOR);
+                    String bagName = childListBag.get(bagIndex - 0).getText();
+                    System.out.println("NAME OF BAG NUMBER " + bagLabel + ": " + bagName + "");
+                    bagNameList.add(bagName);
+                    System.out.println(bagNameList);
+                    bagLabel++;
+                }
+                WebElement nextButton = driver.findElement(BTN_NEXT_LOCATOR);
+                ((JavascriptExecutor) driver).executeScript("scroll(0,6000)");
+                collect.pauseWithTryCatch(1550);
+                nextButton.click();
+                clickIndex += 1;
+                if (clickIndex - 1 == index && clickIndex == pageNodeSize) {
+                    System.out.println("\n" + "\" //-----**------ THE LAST PAGE --------**-------//\"" + "\n");
+                    int listOfBagLastPageSize = driver.findElements(LBL_BAG_NAME_CHILD_LOCATOR).size();
+                    System.out.println("Number of bags page " + (pageNodeSize + 1) +
+                            " is: " + listOfBagLastPageSize + " bags" + "\n");
+                    for (int bagIndexLastPage = 0;
+                         bagIndexLastPage < listOfBagLastPageSize; bagIndexLastPage++) {
+                        WebElement listBagLastPage = driver.findElement(LBL_BAG_NAME_PARENT_LOCATOR);
+                        java.util.List<WebElement> childListBaglastPage = driver.findElements(LBL_BAG_NAME_CHILD_LOCATOR);
+                        String bagNameLastPage = childListBaglastPage.get(bagIndexLastPage - 0).getText();
+                        System.out.println("NAME OF BAG NUMBER " + bagLabel + ": " + bagNameLastPage + "");
+                        bagNameList.add(bagNameLastPage);
+                        System.out.println(bagNameList);
+                        bagLabel++;
+                    }
+                }
+            }
+            System.out.println("\n" + "//-------------//" + "\n");
+            System.out.println("\n" + "LIST OF BAGS NAME BEFORE PROCESSING: " + ssNameList + "\n");
+            System.out.println("\n" + "//-------------//" + "\n");
+            for (int indexInBagNameList = 0;
+                 indexInBagNameList < bagNameList.size();
+                 indexInBagNameList++) {
+
+//            get the first letter of bag name then insert it into a new list
+                char frstLetterOfBagName = (bagNameList.get(indexInBagNameList)).charAt(0);
+                frstCharBagNameList.add(frstLetterOfBagName);
+            }
+            System.out.println("\n" + "//-------------//" + "\n");
+            System.out.println("\n" + "LIST OF BAGS NAME AFTER PROCESSING: " + frstCharBagNameList + "\n");
+            System.out.println("\n" + "//-------------//" + "\n");
+
+/*        assertion of bags name whether list of first
+        letter of bags name is following non-alphabetical order */
+            for (int indexInBagNameList = 0;
+                 indexInBagNameList < frstCharBagNameList.size();
+                 indexInBagNameList++) {
+                if (frstCharBagNameList.get(indexInBagNameList)
+                        .compareTo(frstCharBagNameList.get(indexInBagNameList + 1))>= 0) {
+                    log.info("\n\n//-----**------ ASSERTED SUCCESSFULLY " +
+                            "BAG NAME NUMBER " + (indexInBagNameList + 1) + " --------**-------//" + "\n\n");
+                    this.checkPointIfPassed = true;
+                    this.checkPointIfSkipped = false;
+                    if (this.checkPointIfPassed == true && this.checkPointIfSkipped == false) {
+                        Assert.assertFalse(false);
+                    }
+                } else { //the previous bag name comes after the next bag name in the ASCII order
+                    log.info("\n\n//-----**------ ASSERTED UNSUCCESSFULLY " +
+                            "BAG NAME NUMBER " + (indexInBagNameList + 1) + " --------**-------//" + "\n\n");
+                    this.checkPointIfFailed = true;
+                    this.checkPointIfSkipped = false;
+                    if (this.checkPointIfFailed == true && this.checkPointIfSkipped == false) {
+                        Assert.assertFalse(true);
+                    }
+                }
+            }
+        }
+    }
+    @Test(groups = {"004", "non-alphabetical sort", "clothing CBA"},
+            enabled = true,
+            priority = -4,
+            description =
+                    "this test script is facilitate verifying the sort function" +
+                            "whether it works funtionally:" +
+                            "1. Navigate to collection site" +
+                            "2. Select sort category (clothing) dynamically" +
+                            "3. Select sort criteria (non-alphabetical order)" +
+                            "4. Create an array of clothing name with the first character" +
+                            "5. Assert array of clothing name whether it is sorted by non-alphabetical order"
+    )
+    public void sortClothingTest04() throws TimeoutException,
+            InterruptedException,
+            NoSuchElementException,
+            CommandLine.ExecutionException {
+        this.listValue=1;
+        CollectionPage collect = new CollectionPage(driver);
+
+//        select sort category by clothing sending a text of Title Attribute (getAttribute)
+        collect.selectDynamicSortCategories("title", clothingCategory, driver);
+        log.info("//--**------------ SELECTED CLOTHING CATEGORY -------------**--//" + "\n");
+
+//        select sort clothing by non-alphabetical order sending a text
+        collect.selectDynamicSortCriteria(nonAlphaOrderCriteria, driver);
+        log.info("//--**------------ SORTED BY NON-ALPHABETICAL ORDER -------------**--//" + "\n");
+//        collect.setWaitFor(LBL_CATEGORY_TITLE_LOCATOR);
+        String clothingCategoryGetTxt = driver.findElement(LBL_CATEGORY_TITLE_LOCATOR).getText();
+        System.out.println("" + clothingCategoryGetTxt + "\n");
+
+//       assert clothing title
+        if (clothingCategoryGetTxt.equalsIgnoreCase(clothingTitle)) {
+
+//            the clothing title text matches the expected title => true assertion
+            this.checkPointIfPassed = true;
+            this.checkPointIfFailed = false;
+            this.checkPointIfSkipped = false;
+            if (checkPointIfPassed && !checkPointIfFailed && !checkPointIfSkipped) {
+                Assert.assertFalse(false);
+                System.out.println("Text on web: " + "\"" + clothingCategoryGetTxt +
+                        "\"" + " matched the expected text!" + "\n");
+            }
+        } else {
+            this.checkPointIfPassed = false;
+            this.checkPointIfFailed = true;
+            this.checkPointIfSkipped = false;
+            if (checkPointIfFailed) {
+                Assert.assertFalse(true);
+                System.out.println("Text on web: " + "\"" + clothingCategoryGetTxt + "\"" +
+                        " did not match the expected text!" + "\n");
+            }
+        }
+
+        if (listValue==1) {
+
+/*        declare a variable to attach label to each clothing:
+        - the first clothing: CLOTHING NUMBER 1
+        - the second clothing: CLOTHING NUMBER 2
+        , ...
+ */
+            int clothingLabel = 1;
+            int indexClothingNameArray = 0;
+            int listOfClothingSize = driver.findElements(LBL_CLOTHING_NAME_CHILD_LOCATOR).size();
+            for (int clothingIndex = 0; clothingIndex < listOfClothingSize; clothingIndex++) {
+                org.openqa.selenium.WebElement listClothing =
+                        driver.findElement(LBL_CLOTHING_NAME_PARENT_LOCATOR);
+                java.util.List<WebElement> childListClothing = driver.findElements(LBL_CLOTHING_NAME_CHILD_LOCATOR);
+                String clothingName = childListClothing.get(clothingIndex).getText();
+                System.out.println("NAME OF CLOTHING NUMBER " + clothingLabel + ": " + clothingName + "");
+                clothingNameList.add(clothingName);
+                System.out.println(clothingNameList);
+                clothingLabel++;
+            }
+            System.out.println("\n" + "//-------------//" + "\n");
+            System.out.println("\n" + "LIST OF CLOTHING NAME BEFORE PROCESSING: " + clothingNameList + "\n");
+            System.out.println("\n" + "//-------------//" + "\n");
+            for (int indexInClothingNameList = 0;
+                 indexInClothingNameList < clothingNameList.size();
+                 indexInClothingNameList++) {
+
+//            get the first letter of clothing name then insert it into a new list
+                char frstLetterOfClothingName = (clothingNameList.get(indexInClothingNameList)).charAt(0);
+                frstCharClothingNameList.add(frstLetterOfClothingName);
+            }
+            System.out.println("\n" + "//-------------//" + "\n");
+            System.out.println("\n" + "LIST OF CLOTHING NAME AFTER PROCESSING: " + frstCharClothingNameList + "\n");
+            System.out.println("\n" + "//-------------//" + "\n");
+
+/*              assertion of clothing name whether list of first
+                letter of clothing name is following non-alphabetical order         */
+            for (int indexInClothingNameList = 0;
+                 indexInClothingNameList < frstCharClothingNameList.size();
+                 indexInClothingNameList++) {
+                if (frstCharClothingNameList.get(indexInClothingNameList)
+                        .compareTo(frstCharClothingNameList.get(indexInClothingNameList+ 1))>= 0) {
+                    log.info("\n\n//-----**------ ASSERTED SUCCESSFULLY " +
+                            "CLOTHING NAME NUMBER " + (indexInClothingNameList+ 1) + " --------**-------//" + "\n\n");
+                    this.checkPointIfPassed = true;
+                    this.checkPointIfSkipped = false;
+                    if (this.checkPointIfPassed == true && this.checkPointIfSkipped == false) {
+                        Assert.assertFalse(false);
+                    }
+                } else { //the previous bag name comes after the next bag name in the ASCII order
+                    log.info("\n\n//-----**------ ASSERTED UNSUCCESSFULLY " +
+                            "CLOTHING NAME NUMBER " + (indexInClothingNameList + 1) + " --------**-------//" + "\n\n");
+                    this.checkPointIfFailed = true;
+                    this.checkPointIfSkipped = false;
+                    if (this.checkPointIfFailed == true && this.checkPointIfSkipped == false) {
+                        Assert.assertFalse(true);
+                    }
+                }
+            }
+        }
+        else if (listValue> 1) {
+//            declare a variable to count the number of click
+            int clickIndex = 0;
+
+//        declare a variable to count how many times we have to click
+            int pageNodeSize = driver.findElements(BTN_PAGE_NODE_LOCATOR).size();
+
+/*        declare a variable to attach label to each clothing:
+        - the first clothing: CLOTHING NUMBER 1
+        - the second clothing: CLOTHING NUMBER 2
+        , ...
+ */
+            int clothingLabel = 1;
+            int indexClothingNameArray = 0;
+            System.out.println("Number of page: " + (pageNodeSize + 1) + "");
+            for (int index = 0; index < pageNodeSize; index++) {
+
+//            get number of bags per page
+                int listOfClothingSize = driver.findElements(LBL_CLOTHING_NAME_CHILD_LOCATOR).size();
+                System.out.println("\n" + "Number of clothing page " + (index + 1) +
+                        " is: " + listOfClothingSize + " clothing" + "\n");
+                for (int clothingIndex = 0; clothingIndex < listOfClothingSize; clothingIndex++) {
+                    WebElement listClothing = driver.findElement(LBL_CLOTHING_NAME_PARENT_LOCATOR);
+                    java.util.List<WebElement> childListClothing = driver.findElements(LBL_CLOTHING_NAME_CHILD_LOCATOR);
+                    String clothingName = childListClothing.get(clothingIndex - 0).getText();
+                    System.out.println("NAME OF CLOTHING NUMBER " + clothingLabel + ": " + clothingName + "");
+                    clothingNameList.add(clothingName);
+                    System.out.println(clothingNameList);
+                    clothingLabel++;
+                }
+                WebElement nextButton = driver.findElement(BTN_NEXT_LOCATOR);
+                ((JavascriptExecutor) driver).executeScript("scroll(0,6000)");
+                collect.pauseWithTryCatch(1550);
+                nextButton.click();
+                clickIndex += 1;
+                if (clickIndex - 1 == index && clickIndex == pageNodeSize) {
+                    System.out.println("\n" + "\" //-----**------ THE LAST PAGE --------**-------//\"" + "\n");
+                    int listOfClothingLastPageSize = driver.findElements(LBL_CLOTHING_NAME_CHILD_LOCATOR).size();
+                    System.out.println("Number of clothing page " + (pageNodeSize + 1) +
+                            " is: " + listOfClothingLastPageSize + " bags" + "\n");
+                    for (int clothingIndexLastPage = 0;
+                         clothingIndexLastPage < listOfClothingLastPageSize; clothingIndexLastPage++) {
+                        WebElement listClothingLastPage = driver.findElement(LBL_CLOTHING_NAME_PARENT_LOCATOR);
+                        java.util.List<WebElement> childListClothingLastPage = driver.findElements(LBL_CLOTHING_NAME_CHILD_LOCATOR);
+                        String clothingNameLastPage =
+                                childListClothingLastPage.get(clothingIndexLastPage - 0).getText();
+                        System.out.println("NAME OF CLOTHING NUMBER " + clothingLabel + ": " + clothingNameLastPage + "");
+                        clothingNameList.add(clothingNameLastPage);
+                        System.out.println(clothingNameList);
+                        clothingLabel++;
+                    }
+                }
+            }
+            System.out.println("\n" + "//-------------//" + "\n");
+            System.out.println("\n" + "LIST OF CLOTHING NAME BEFORE PROCESSING: " + clothingNameList + "\n");
+            System.out.println("\n" + "//-------------//" + "\n");
+            for (int indexInClothingNameList = 0;
+                 indexInClothingNameList < clothingNameList.size();
+                 indexInClothingNameList++) {
+
+//            get the first letter of clothing name then insert it into a new list
+                char frstLetterOfClothingName = (clothingNameList.get(indexInClothingNameList)).charAt(0);
+                frstCharClothingNameList.add(frstLetterOfClothingName);
+            }
+            System.out.println("\n" + "//-------------//" + "\n");
+            System.out.println("\n" + "LIST OF CLOTHING NAME AFTER PROCESSING: " + frstCharClothingNameList + "\n");
+            System.out.println("\n" + "//-------------//" + "\n");
+
+/*        assertion of clothing name whether list of first
+        letter of clothing name is following non-alphabetical order */
+            for (int indexInClothingNameList = 0;
+                 indexInClothingNameList < frstCharClothingNameList.size();
+                 indexInClothingNameList++) {
+                if (frstCharClothingNameList.get(indexInClothingNameList)
+                        .compareTo(frstCharClothingNameList.get(indexInClothingNameList + 1))>= 0) {
+                    log.info("\n\n//-----**------ ASSERTED SUCCESSFULLY " +
+                            "CLOTHING NAME NUMBER " + (indexInClothingNameList + 1) + " --------**-------//" + "\n\n");
+                    this.checkPointIfPassed = true;
+                    this.checkPointIfSkipped = false;
+                    if (this.checkPointIfPassed == true && this.checkPointIfSkipped == false) {
+                        Assert.assertFalse(false);
+                    }
+                } else { //the previous clothing name comes after the next clothing name in the ASCII order
+                    log.info("\n\n//-----**------ ASSERTED UNSUCCESSFULLY " +
+                            "CLOTHING NAME NUMBER " + (indexInClothingNameList + 1) + " --------**-------//" + "\n\n");
+                    this.checkPointIfFailed = true;
+                    this.checkPointIfSkipped = false;
+                    if (this.checkPointIfFailed == true && this.checkPointIfSkipped == false) {
+                        Assert.assertFalse(true);
+                    }
+                }
+            }
+        }
+    }
 
 
 
