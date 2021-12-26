@@ -1,5 +1,5 @@
 import * as homepage from "../../pageObjects/HomePage"  
-import * as abstract from "../../pageObjects/AbtractPage";
+import * as abstract from "../../pageObjects/AbtractPage"
 
 let appendedURL
 let searchKey
@@ -15,7 +15,7 @@ describe ('User navigates to home page, search product and observe the listing r
         appendedURL=""
         abstract.navigateToURL(appendedURL);
     })
-    it('Test case 001 - Search Product successfully when inputting an existing keyword', function() {
+    it.only('Test case 001 - Search Product successfully when inputting an existing keyword and there is only one page of returned products name', function() {
         //redeclare the keyword to search
         searchKey= "adidas"
         //click on Search/Spy Glass icon to trigger the search product section
@@ -30,7 +30,7 @@ describe ('User navigates to home page, search product and observe the listing r
         homepage.assertProductNameContainsSearchKey(searchKey)
     })//close Test Case 001
 
-    it('Test case 002 - Search Product unsuccessfully when entering a non-existing keyword', function() {
+    it.skip('Test case 002 - Search Product unsuccessfully when entering a non-existing keyword', function() {
         //declare the variables to run test
         searchKey= "synth"
         expSearchTextLbl= "Tìm kiếm"
@@ -49,8 +49,19 @@ describe ('User navigates to home page, search product and observe the listing r
             noResultsFoundTxt, 
             didntHaveAnyResultsTxt, 
             checkSpellingLbl)
-    })
-    //close Test Case 002
+    })//close Test Case 002
+    it.skip('Test case 003 - Search Product unsuccessfully when entering a non-existing keyword. There are more than one page along with the presence of pagination', ()=> {
+        //declare the variables to run test
+        searchKey= "b"
+        //click on Search/Spy Glass icon to trigger the search product section
+        homepage.clickSearchIcon()
+        //enter search key to search textbox
+        homepage.inputSearchText(searchKey)
+        //press enter key to start searching product
+        homepage.pressEnterKey()
+        //verify each Product name if it encompasses the inputted Search key that is entered by User
+        homepage.assertProductNameContainsSearchKeyPages(searchKey)
+    })//close Test Case 003
     afterEach(() =>{
         cy.log("TEST CASE IS TERMINATED!")
     })
