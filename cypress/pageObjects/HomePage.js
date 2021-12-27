@@ -17,6 +17,7 @@ let textResultGetTxt
 let productNameGetTxt
 let totalProduct
 let pageNumber
+let LBL_PRODUCT_SPECIFIC_NAME_LOCATOR
 const productName= []
 
 export function clickSearchIcon() {
@@ -159,6 +160,11 @@ export function assertNoResultsFoundTexts(searchKey, expSearchTextLbl, noResults
             cy.end()
             }
     })
+}
+
+export function clickOnSpecificProductName(productSpecificName) {
+    LBL_PRODUCT_SPECIFIC_NAME_LOCATOR= '//h3//a[@href and contains(@title, "'+ productSpecificName+ '")]'
+    cy.xpath(LBL_PRODUCT_SPECIFIC_NAME_LOCATOR).click()
 }
 
 
