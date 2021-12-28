@@ -9,6 +9,7 @@ const LBL_INTO_MONEY= '//div[@class= "price"]//span[2]'
 const LBL_TOTAL_MONEY= '//div[@class= "summary-total"]//span'
 const BTN_QUANTITY_PLUS_LOCATOR= '//button[contains(@class, "qtyplus")]'
 const BTN_QUANTITY_MINUS_LOCATOR= '//button[contains(@class, "qtyminus")]'
+const BTN_CHECKOUT_LOCATOR= '//a[@class= "checkout-btn"]'
 
 //declare handy variables
 let proNameGetTxtViewProPageStore
@@ -22,6 +23,10 @@ export function clickOnQuantityPlusButton(times) {
     for (var clickTimes= 0; clickTimes< times-1; clickTimes+=1) {
         cy.xpath(BTN_QUANTITY_PLUS_LOCATOR).click()
     }
+}
+
+export function clickOnCheckOutBtn() {
+    cy.xpath(BTN_CHECKOUT_LOCATOR).click()
 }
 
 export function verifyProductNameMyCartIsMatched(proName) {

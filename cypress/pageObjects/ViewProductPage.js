@@ -8,6 +8,8 @@ const LBL_PRODUCT_NAME_MY_CART_PAGE_LOCATOR= '//div[@class= "item-info"]//h3'
 const LBL_QUANTITY_LOCATOR= '//input[contains(@class, "quantity") and @data-price]'
 const LBL_INTO_MONEY= '//div[@class= "price"]//span[2]'
 const LBL_TOTAL_MONEY= '//div[@class= "summary-total"]//span'
+const BTN_BUY_NOW_LOCATOR= '//div[@class= "row-flex"]//button[2][@id= "buy-now"]'
+const BTN_CHECKOUT_POPUP_LOCATOR= '//a[contains(@class, "linktocheckout")]'
 
 //declare handy variables
 let proNameGetTxtViewProPageStore
@@ -17,6 +19,13 @@ let proQuantityGetTxtStore
 let proIntoMoneyGetTxtStore
 let proTotalMoneyGetTxtStore
 
+export function clickOnCheckOutPopupBtn() {
+    cy.xpath(BTN_CHECKOUT_POPUP_LOCATOR).click()
+}
+
+export function clickOnBuyNowBtn() {
+    cy.xpath(BTN_BUY_NOW_LOCATOR).click()
+}
 
 export function clickOnAddProductToCartBtn() {
     cy.xpath(BTN_ADD_PRODUCT_TO_CART_LOCATOR).click()
@@ -105,8 +114,8 @@ export function verifyProductTotalMoneyIsMatched(proTotalMoney) {
 }
 
 function productPriceGetTxtProcessing(productPriceGetTxt) {
-    //define this function to sharpen the product price from raw to parse int
- 
+
+    //define this function to sharpen the product price from raw to parse int 
     var productPriceGetTxtTrim= productPriceGetTxt.trim()
     if ((productPriceGetTxtTrim).length==8) {
         var productPriceGetTxtSubString= productPriceGetTxtTrim.substring(0, 7)

@@ -52,10 +52,10 @@ describe("Add Product to Cart - User redirets to Home page, then click on a spec
         //assert the "total money" of the added Product 
         myCart.verifyProductTotalMoneyIsMatched(parseInt(speProductTotalMoney))
     })//close Test Case 001
-    it.only('Test Case 002 - Verify that Cart displays correctly when adding 1 Product to Cart with quantity is more than 1', function() {
+    it('Test Case 002 - Verify that Cart displays correctly when adding 1 Product to Cart with quantity is more than 1', function() {
         //assign value for variables
         speProductName= "JORDAN 1 MID SMOKE GREY NOIR GS".toUpperCase()
-        speProductQuantity= "15"
+        speProductQuantity= "5"
         speProductIntoMoney= 7290000
         // speProductTotalMoney= speProductIntoMoney
         //click on a desired Product Name inputted from keyboard
